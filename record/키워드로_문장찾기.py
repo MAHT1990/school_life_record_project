@@ -14,38 +14,37 @@ result_wb = opx.load_workbook('.\exel_files\sample.xlsx')
 
 #################################################################################
 
-#담임sht 변수 지정
-담임sht = result_wb['담임']
+#HRsht 변수 지정
+HRsht = result_wb['HR']
 
-#담임sht에 있는 문단들 다 불러오기
-담임paragraphs = []
+#HRsht에 있는 문단들 다 불러오기
+HRparagraphs = []
 
-for i in range(1,담임sht.max_row + 1):
-    담임paragraphs.append(담임sht.cell(row=i, column = 2).value)
+for i in range(1,HRsht.max_row + 1):
+    HRparagraphs.append(HRsht.cell(row=i, column = 2).value)
 
-# print(담임paragraphs)
+# print(HRparagraphs)
 
 #################################################################################
 
-#담임sht에 있는 문단들 다 쪼개서, 문장으로 모으기
-담임sentences = []
+#HRsht에 있는 문단들 다 쪼개서, 문장으로 모으기
+HRsentences = []
 
-for i in range(0,len(담임paragraphs)): #인덱스에 반복문을 넣어서, 모든 문장들을 분해할 수 있도록 한다.
-     담임sentences += 담임paragraphs[i].split('.')
+for i in range(0,len(HRparagraphs)): #인덱스에 반복문을 넣어서, 모든 문장들을 분해할 수 있도록 한다.
+     HRsentences += HRparagraphs[i].split('.')
          #all_senteces.append() 클래스메쏘드를 사용하면, 리스트안에 리스트로 원소가 들어가게됨.
          #그러므로, 리스트 연산자를 이용해서 원소들을 다 모아줌.
 
-print(담임sentences)
+HRsentences_set = set(HRsentences)
+
 #################################################################################
 
 #키워드를 가진 문장 찾기.
 while True:
     key_word=input('키워드를 입력하세요......')
 
-    for sentence in 담임sentences:
+    for sentence in HRsentences_set:
         if sentence.find(key_word)>=0:
-            print(sentence,'\n')
+            print(sentence+'.','\n')
         if sentence.find(key_word)<0:
             None
-    if sentence.find(key_word)<0:
-        print('해당 키워드 없음')
