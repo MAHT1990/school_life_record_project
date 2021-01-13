@@ -1,12 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>HaengBal</title>
 </head>
+
 <body>
-  <h1>Hello HaengBal!</h1>
+  {% if is_logined == True %}
+  <h1>Happy HaengBal</h1>
+  <h2>{{nickname}}님, 사랑합니다.</h2>
+  <div>
+    <p>본 페이지는, 행발을 조금이나마 자세하고 풍성하게 쓰기위한 페이지입니다.</p>
+    <p>검색한 문장의 복붙은 지양해주시고, </p>
+    <p>유연하게 변형하여 더 나은 문장으로 발전시키시길 바랍니다. </p>
+  </div>
+  {% else %}
+  <h2>로그인을 해주세요.</h2>
+  {% endif %}
+  <br>
+  <hr style="border:3px solid gray;">
+  {% if is_logined == True %}
+  <div>
+    <input class="keyword 1" type="text">
+    <input class="keyword 2" type="text">
+    <input class="keyword 3" type="text">
+    <input class="keyword 4" type="text">
+    <input class="keyword 5" type="text">
+    <!-- TODO: flex container 만들고, 간격조정. -->
+    <p id="result_0"></p>
+    <p id="result_1"></p>
+    <p id="result_2"></p>
+    <p id="result_3"></p>
+    <p id="result_4"></p>
+  </div>
+  <script>
+    const input_0 = document.getElementsByTagName('input')[0];
+    const input_1 = document.getElementsByTagName('input')[1];
+    const input_2 = document.getElementsByTagName('input')[2];
+    const input_3 = document.getElementsByTagName('input')[3];
+    const input_4 = document.getElementsByTagName('input')[4];
+
+    const log_0 = document.getElementById('result_0');
+    const log_1 = document.getElementById('result_1');
+    const log_2 = document.getElementById('result_2');
+    const log_3 = document.getElementById('result_3');
+    const log_4 = document.getElementById('result_4');
+
+    input_0.addEventListener('input', updateValue_0);
+    input_1.addEventListener('input', updateValue_1);
+    input_2.addEventListener('input', updateValue_2);
+    input_3.addEventListener('input', updateValue_3);
+    input_4.addEventListener('input', updateValue_4);
+
+    function updateValue_0(e) {
+      log_0.textContent = e.target.value;
+      let url = '/record/'+e.target.value+'/';
+      let req = new XMLHttpRequest();
+      req.open('GET',url);
+      req.onload = function () {
+        const jsonResponse = JSON.parse(req.responseText)
+        const data = jsonResponse['data']
+        for(let i=0; i<data.length; i++){
+          let sentence = '<span>'+data[i]+'</span><br>'
+          document.getElementsByTagName('body')[0].innerHTML+=sentence
+        }
+      }
+
+      req.send();
+      // TODO: 끝에 슬래쉬 문제될 수도 있으니 주목.
+    }
+    function updateValue_1(e) {log_1.textContent = e.target.value;}
+    function updateValue_2(e) {log_2.textContent = e.target.value;}
+    function updateValue_3(e) {log_3.textContent = e.target.value;}
+    function updateValue_4(e) {log_4.textContent = e.target.value;}
+  </script>
+  {% else %}
+  {% endif %}
 </body>
+
 </html>

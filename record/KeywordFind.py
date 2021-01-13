@@ -10,7 +10,7 @@ import openpyxl as opx
 #################################################################################
 
 #파일 읽어오기
-result_wb = opx.load_workbook('.\exel_files\sample.xlsx')
+result_wb = opx.load_workbook('record/exel_files/sample.xlsx')
 
 #################################################################################
 
@@ -40,11 +40,29 @@ HRsentences_set = set(HRsentences)
 #################################################################################
 
 #키워드를 가진 문장 찾기.
-while True:
-    key_word=input('키워드를 입력하세요......')
 
+def KeywordFind(keyword):
+    items=[]
     for sentence in HRsentences_set:
-        if sentence.find(key_word)>=0:
-            print(sentence+'.','\n')
-        if sentence.find(key_word)<0:
+        if sentence.find(keyword)>=0:
+            items.append(sentence)
+        else:
             None
+    return items
+
+'''
+text용
+
+key_word=input('키워드를 입력하세요......')
+print(KeywordFind(key_word))
+
+# while True:
+#     key_word=input('키워드를 입력하세요......')
+#
+#     for sentence in HRsentences_set:
+#         if sentence.find(key_word)>=0:
+#             print(sentence+'.','\n')
+#         if sentence.find(key_word)<0:
+#             None
+
+'''
