@@ -6,6 +6,7 @@ from .KeywordFind import KeywordFind
 from django.views.decorators.csrf import csrf_exempt
 # 같은 폴더내에 KeywordFind.py 에서 KeywordFind 함수를 가져온다.
 import json
+from urllib import parse
 # Create your views here.
 
 def index(request):
@@ -32,8 +33,25 @@ def sentence(request, keyword):
             'msg': 'success',
             'data': None # dictionary 형태로 서빙을 해주면 여러개를 서빙하기 곤란하다.
         }
+    keyword_decode = parse.unquote(parse.unquote(keyword))
+    # TODO: Encoding 문제 해결. 한글을 받아라!
+    response_data['data'] = KeywordFind(keyword_decode)
+        #
+        #from .KeywordFind.py import KeywordFind(keyword)
+        #는 keyword가 들어있는 문장들을 list로 반환한다.
+        #
 
-    response_data['data'] = KeywordFind(keyword)
+    return JsonResponse(response_data)
+    # return HttpResponse('sentence function ready')
+
+def sentence_post(request):
+    response_data = {
+        # 설계한 대로 응답 데이터를 정리해주면 된다.
+            'status': 200,
+            'msg': 'success',
+            'data': None # dictionary 형태로 서빙을 해주면 여러개를 서빙하기 곤란하다.
+        }
+    response_data['data'] = KeywordFind(request.POST["keyword_2"])
         #
         #from .KeywordFind.py import KeywordFind(keyword)
         #는 keyword가 들어있는 문장들을 list로 반환한다.

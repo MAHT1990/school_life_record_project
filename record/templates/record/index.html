@@ -25,7 +25,7 @@
   {% if is_logined == True %}
   <div>
     <input class="keyword 1" type="text">
-    <input class="keyword 2" type="text">
+    <input class="keyword 2" type="search" name="keyword_2">
     <input class="keyword 3" type="text">
     <input class="keyword 4" type="text">
     <input class="keyword 5" type="text">
@@ -49,33 +49,76 @@
     const log_3 = document.getElementById('result_3');
     const log_4 = document.getElementById('result_4');
 
-    input_0.addEventListener('input', updateValue_0);
-    input_1.addEventListener('input', updateValue_1);
-    input_2.addEventListener('input', updateValue_2);
+    input_0.addEventListener('keypress', updateValue_0);
+    input_1.addEventListener('search', updateValue_1);
+    input_2.addEventListener('keypress', updateValue_2);
     input_3.addEventListener('input', updateValue_3);
     input_4.addEventListener('input', updateValue_4);
 
     function updateValue_0(e) {
-      log_0.textContent = e.target.value;
-      let url = '/record/'+e.target.value+'/';
+      if (window.event.keyCode == 13) {
+        let url = '/record/' + encodeURI(encodeURIComponent(e.target.value)) + '/';
+        // encodeURI(encodeURIComponent(e.target.value))
+        //
+        let req = new XMLHttpRequest();
+        req.open('GET', url);
+        req.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            const jsonResponse = JSON.parse(req.responseText)
+            const data = jsonResponse['data']
+            log_0.innerHTML = "";
+            for (let i = 0; i < data.length; i++) {
+              let sentence = '<span>' + data[i] + '</span><br>'
+              // document.getElementsByTagName('body')[0].innerHTML += sentence
+              // 이 부분이 문제인데.... 왜 문제지????????????
+              log_0.innerHTML += sentence;
+            }
+          }
+          else {
+            // console.log('실패')
+            null;
+          }
+        }
+        req.send();
+      }
+    }
+
+    function updateValue_1(e) {
+      log_1.textContent += e.target.value;
+      let url = 'record/post/';
       let req = new XMLHttpRequest();
-      req.open('GET',url);
-      req.onload = function () {
-        const jsonResponse = JSON.parse(req.responseText)
-        const data = jsonResponse['data']
-        for(let i=0; i<data.length; i++){
-          let sentence = '<span>'+data[i]+'</span><br>'
-          document.getElementsByTagName('body')[0].innerHTML+=sentence
+      req.open('POST', url);
+      req.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          const jsonResponse = JSON.parse(req.responseText)
+          const data = jsonResponse['data']
+          for (let i = 0; i < data.length; i++) {
+            let sentence = '<span>' + data[i] + '</span><br>'
+            document.getElementsByTagName('body')[0].innerHTML += sentence
+          }
+        } else {
+          console.log('실패')
         }
       }
-
-      req.send();
-      // TODO: 끝에 슬래쉬 문제될 수도 있으니 주목.
+      req.send({
+        "keyword_2": e.target.value
+      });
     }
-    function updateValue_1(e) {log_1.textContent = e.target.value;}
-    function updateValue_2(e) {log_2.textContent = e.target.value;}
-    function updateValue_3(e) {log_3.textContent = e.target.value;}
-    function updateValue_4(e) {log_4.textContent = e.target.value;}
+
+    function updateValue_2(e) {
+      log_2.textContent = e.target.value;
+      if (window.event.keyCode == 13){
+        console.log('it is ENTER')
+      }
+    }
+
+    function updateValue_3(e) {
+      log_3.textContent = e.target.value;
+    }
+
+    function updateValue_4(e) {
+      log_4.textContent = e.target.value;
+    }
   </script>
   {% else %}
   {% endif %}

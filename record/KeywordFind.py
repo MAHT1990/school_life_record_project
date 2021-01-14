@@ -41,20 +41,20 @@ HRsentences_set = set(HRsentences)
 
 #키워드를 가진 문장 찾기.
 
-def KeywordFind(keyword):
+def KeywordFind(kw):
     items=[]
     for sentence in HRsentences_set:
-        if sentence.find(keyword)>=0:
+        if sentence.find(kw)>=0:
             items.append(sentence)
         else:
             None
     return items
 
-'''
-text용
-
-key_word=input('키워드를 입력하세요......')
-print(KeywordFind(key_word))
+#
+# text용
+#
+# key_word=input('키워드를 입력하세요......')
+# print(KeywordFind(key_word))
 
 # while True:
 #     key_word=input('키워드를 입력하세요......')
@@ -64,5 +64,3 @@ print(KeywordFind(key_word))
 #             print(sentence+'.','\n')
 #         if sentence.find(key_word)<0:
 #             None
-
-'''
