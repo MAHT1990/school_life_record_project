@@ -1,0 +1,25 @@
+.input_container {
+  display: flex;
+}
+
+.input_container>input {
+  flex: 1;
+  margin: 2px;
+}
+
+.result_container>div>div:nth-child(1) {
+  /* height: 50px; */
+  font-size: 30px;
+  color: white;
+  line-height: 30px;
+  background-color: blue;
+}
+
+.result_container>div>div:nth-child(2) {
+  width: 100%;
+  border: 1px solid black;
+}
+
+.result_container>div>div:nth-child(2)>div {
+  margin: 5px;
+}

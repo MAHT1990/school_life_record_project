@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,6 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="{% static 'record/css/index.css' %}">
   <title>HaengBal</title>
 </head>
 
@@ -21,88 +23,77 @@
   <h2>로그인을 해주세요.</h2>
   {% endif %}
   <br>
-  <hr style="border:3px solid gray;">
   {% if is_logined == True %}
-  <div>
-    <input class="keyword 1" type="text">
-    <input class="keyword 2" type="search" name="keyword_2">
-    <input class="keyword 3" type="text">
-    <input class="keyword 4" type="text">
-    <input class="keyword 5" type="text">
+  <hr style="border:3px solid gray;">
+  <div class="input_container">
+    <input class="keyword_0" type="search">
+    <input class="keyword_1" type="search">
+    <input class="keyword_2" type="search">
+    <input class="keyword_3" type="search">
+    <input class="keyword_4" type="search">
     <!-- TODO: flex container 만들고, 간격조정. -->
-    <p id="result_0"></p>
-    <p id="result_1"></p>
-    <p id="result_2"></p>
-    <p id="result_3"></p>
-    <p id="result_4"></p>
+  </div>
+  <hr style="border:3px solid gray;">
+  <div class="result_container">
+    <div>
+      <div class="keyword_0"></div>
+      <div class="keyword_0"></div>
+    </div>
+    <div>
+      <div class="keyword_1"></div>
+      <div class="keyword_1"></div>
+    </div>
+    <div>
+      <div class="keyword_2"></div>
+      <div class="keyword_2"></div>
+    </div>
+    <div>
+      <div class="keyword_3"></div>
+      <div class="keyword_3"></div>
+    </div>
+    <div>
+      <div class="keyword_4"></div>
+      <div class="keyword_4"></div>
+    </div>
   </div>
   <script>
-    const input_0 = document.getElementsByTagName('input')[0];
-    const input_1 = document.getElementsByTagName('input')[1];
-    const input_2 = document.getElementsByTagName('input')[2];
-    const input_3 = document.getElementsByTagName('input')[3];
-    const input_4 = document.getElementsByTagName('input')[4];
 
-    const log_0 = document.getElementById('result_0');
-    const log_1 = document.getElementById('result_1');
-    const log_2 = document.getElementById('result_2');
-    const log_3 = document.getElementById('result_3');
-    const log_4 = document.getElementById('result_4');
-
-    input_0.addEventListener('keypress', updateValue_0);
-    input_1.addEventListener('search', updateValue_1);
-    input_2.addEventListener('keypress', updateValue_2);
-    input_3.addEventListener('input', updateValue_3);
-    input_4.addEventListener('input', updateValue_4);
-
-    function updateValue_0(e) {
-      if (window.event.keyCode == 13) {
-        let url = '/record/' + encodeURI(encodeURIComponent(e.target.value)) + '/';
-        // encodeURI(encodeURIComponent(e.target.value))
-        //
-        let req = new XMLHttpRequest();
-        req.open('GET', url);
-        req.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            const jsonResponse = JSON.parse(req.responseText)
-            const data = jsonResponse['data']
-            log_0.innerHTML = "";
-            for (let i = 0; i < data.length; i++) {
-              let sentence = '<span>' + data[i] + '</span><br>'
-              // document.getElementsByTagName('body')[0].innerHTML += sentence
-              // 이 부분이 문제인데.... 왜 문제지????????????
-              log_0.innerHTML += sentence;
-            }
-          }
-          else {
-            // console.log('실패')
-            null;
-          }
-        }
-        req.send();
-      }
+    for (let i=0; i < document.getElementsByTagName('input').length; i++) {
+      document.getElementsByTagName('input')[i].addEventListener('search', updateValue);
+      // for 문을 통해 input 태그마다, 모두 updateValue Event를 추가해준다.
     }
 
-    function updateValue_1(e) {
-      log_1.textContent += e.target.value;
-      let url = 'record/post/';
+
+    function updateValue(e) {
+      e_target_class = e.target.getAttribute('class');
+      // <input>, 제목 <div>, 문장 <div> 에 동일한 class 이름을 부여했다.
+      title = document.getElementsByClassName(e_target_class)[1]
+      content = document.getElementsByClassName(e_target_class)[2]
+      // index에 따라서 [0]은 input, [1]은 제목div, [2]는 content div에 접근한다.
+
+      let url = 'post/';
       let req = new XMLHttpRequest();
       req.open('POST', url);
       req.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           const jsonResponse = JSON.parse(req.responseText)
           const data = jsonResponse['data']
+          title.innerHTML = e.target.value+'<br>';
+          content.innerHTML = "";
           for (let i = 0; i < data.length; i++) {
-            let sentence = '<span>' + data[i] + '</span><br>'
-            document.getElementsByTagName('body')[0].innerHTML += sentence
+            let sentence = '<div>' +'-'+ data[i] + '.</div><br>'
+            // document.getElementsByTagName('body')[0].innerHTML += sentence
+            content.innerHTML += sentence;
           }
         } else {
           console.log('실패')
         }
       }
-      req.send({
-        "keyword_2": e.target.value
-      });
+      req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+      // POST 방식으로 보낼 때에는 setRequestHeader 를 변경해주어야 하는구나.
+      req.send(
+        "keyword_2="+e.target.value
+      );
     }
 
     function updateValue_2(e) {
@@ -112,13 +103,7 @@
       }
     }
 
-    function updateValue_3(e) {
-      log_3.textContent = e.target.value;
-    }
 
-    function updateValue_4(e) {
-      log_4.textContent = e.target.value;
-    }
   </script>
   {% else %}
   {% endif %}

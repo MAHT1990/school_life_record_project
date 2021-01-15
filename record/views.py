@@ -28,34 +28,30 @@ def index(request):
 @csrf_exempt
 def sentence(request, keyword):
     response_data = {
-        # 설계한 대로 응답 데이터를 정리해주면 된다.
-            'status': 200,
-            'msg': 'success',
-            'data': None # dictionary 형태로 서빙을 해주면 여러개를 서빙하기 곤란하다.
-        }
-    keyword_decode = parse.unquote(parse.unquote(keyword))
-    # TODO: Encoding 문제 해결. 한글을 받아라!
-    response_data['data'] = KeywordFind(keyword_decode)
-        #
-        #from .KeywordFind.py import KeywordFind(keyword)
-        #는 keyword가 들어있는 문장들을 list로 반환한다.
-        #
+    # 설계한 대로 응답 데이터를 정리해주면 된다.
+    'status': 200,
+    'msg': 'success',
+    'data': None # dictionary 형태로 서빙을 해주면 여러개를 서빙하기 곤란하다.
+    }
 
-    return JsonResponse(response_data)
-    # return HttpResponse('sentence function ready')
+    if request.method == 'GET':
+        keyword_decode = parse.unquote(parse.unquote(keyword))
+        # TODO: Encoding 문제 해결. 한글을 받아라!
+        response_data['data'] = KeywordFind(keyword_decode)
+            #
+            #from .KeywordFind.py import KeywordFind(keyword)
+            #는 keyword가 들어있는 문장들을 list로 반환한다.
+            #
 
-def sentence_post(request):
-    response_data = {
-        # 설계한 대로 응답 데이터를 정리해주면 된다.
-            'status': 200,
-            'msg': 'success',
-            'data': None # dictionary 형태로 서빙을 해주면 여러개를 서빙하기 곤란하다.
-        }
-    response_data['data'] = KeywordFind(request.POST["keyword_2"])
-        #
-        #from .KeywordFind.py import KeywordFind(keyword)
-        #는 keyword가 들어있는 문장들을 list로 반환한다.
-        #
+        return JsonResponse(response_data)
+        # return HttpResponse('sentence function ready')
+    elif request.method == 'POST':
+        response_data['data'] = KeywordFind(request.POST["keyword_2"])
+            #
+            #from .KeywordFind.py import KeywordFind(keyword)
+            #는 keyword가 들어있는 문장들을 list로 반환한다.
+            #
 
-    return JsonResponse(response_data)
-    # return HttpResponse('sentence function ready')
+        return JsonResponse(response_data)
+        # return JsonResponse({'status': 2020})
+        # return HttpResponse('sentence function ready')
