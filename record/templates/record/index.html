@@ -18,7 +18,7 @@
     <p>본 페이지는, 행발을 조금이나마 자세하고 풍성하게 쓰기위한 페이지입니다.</p>
     <p>검색한 문장의 복붙은 지양해주시고, </p>
     <p>유연하게 변형하여 더 나은 문장으로 발전시키시길 바랍니다. </p>
-    <p style="color: gray; font-weight:600;">이용법 : 키워드 입력 + Enter  끝. </p>
+    <p style="color: gray; font-weight:600;">이용법 : 키워드 입력 + Enter 끝. </p>
   </div>
   {% else %}
   <h2>로그인을 해주세요.</h2>
@@ -58,8 +58,7 @@
     </div>
   </div>
   <script>
-
-    for (let i=0; i < document.getElementsByTagName('input').length; i++) {
+    for (let i = 0; i < document.getElementsByTagName('input').length; i++) {
       document.getElementsByTagName('input')[i].addEventListener('search', updateValue);
       // for 문을 통해 input 태그마다, 모두 updateValue Event를 추가해준다.
     }
@@ -79,10 +78,10 @@
         if (this.readyState == 4 && this.status == 200) {
           const jsonResponse = JSON.parse(req.responseText)
           const data = jsonResponse['data']
-          title.innerHTML = e.target.value+'<br>';
+          title.innerHTML = e.target.value + '<br>';
           content.innerHTML = "";
           for (let i = 0; i < data.length; i++) {
-            let sentence = '<div>' +'-'+ data[i] + '.</div><br>'
+            let sentence = '<div>' + '-' + data[i] + '.</div><br>'
             // document.getElementsByTagName('body')[0].innerHTML += sentence
             content.innerHTML += sentence;
           }
@@ -90,15 +89,34 @@
           console.log('실패')
         }
       }
+
+      // POST 요청시 csrf_token 처리 함수
+      function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+
+      var csrftoken = getCookie('csrftoken');
+      // POST 요청시 csrf_token 처리 함수
+      
       req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+      req.setRequestHeader("X-CSRFToken", csrftoken)
       // POST 방식으로 보낼 때에는 setRequestHeader 를 변경해주어야 하는구나.
       req.send(
-        "keyword_2="+e.target.value
+        "keyword_2=" + e.target.value
       );
     }
-
-
-
   </script>
   {% else %}
   {% endif %}
