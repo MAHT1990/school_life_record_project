@@ -11,7 +11,7 @@ def login(request):
         return render(request, 'accounts/login.html')
 
     elif request.method == 'POST':
-        print(request.POST)
+        # print(request.POST)
         login_id = request.POST["login_id"]
         login_pw = request.POST["login_pw"]
 
