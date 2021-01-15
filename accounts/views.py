@@ -5,7 +5,7 @@ from .models import Member
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
-@csrf_exempt
+# @csrf_exempt
 def login(request):
     if request.method == 'GET':
         return render(request, 'accounts/login.html')

@@ -9,7 +9,7 @@ import json
 from urllib import parse
 # Create your views here.
 
-@csrf_exempt
+# @csrf_exempt
 def index(request):
     login_id = request.session.get('login_id', False)
     member = Member.objects.filter(login_id=login_id).first()
@@ -26,7 +26,7 @@ def index(request):
         'login_id': login_id,
         'nickname': nickname
     })
-@csrf_exempt
+# @csrf_exempt
 def sentence(request, keyword):
     response_data = {
     # 설계한 대로 응답 데이터를 정리해주면 된다.
