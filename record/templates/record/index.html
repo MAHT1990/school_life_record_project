@@ -12,12 +12,13 @@
 
 <body>
   {% if is_logined == True %}
-  <h1>Happy HaengBal</h1>
+  <h1>Happy HaengBal(ver. 1.00)</h1>
   <h2>{{nickname}}님, 사랑합니다.</h2>
   <div>
     <p>본 페이지는, 행발을 조금이나마 자세하고 풍성하게 쓰기위한 페이지입니다.</p>
     <p>검색한 문장의 복붙은 지양해주시고, </p>
     <p>유연하게 변형하여 더 나은 문장으로 발전시키시길 바랍니다. </p>
+    <p style="color: gray; font-weight:600;">이용법 : 키워드 입력 + Enter  끝. </p>
   </div>
   {% else %}
   <h2>로그인을 해주세요.</h2>
@@ -96,12 +97,6 @@
       );
     }
 
-    function updateValue_2(e) {
-      log_2.textContent = e.target.value;
-      if (window.event.keyCode == 13){
-        console.log('it is ENTER')
-      }
-    }
 
 
   </script>
