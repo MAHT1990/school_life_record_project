@@ -9,6 +9,7 @@ import json
 from urllib import parse
 # Create your views here.
 
+@csrf_exempt
 def index(request):
     login_id = request.session.get('login_id', False)
     member = Member.objects.filter(login_id=login_id).first()
