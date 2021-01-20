@@ -2,8 +2,9 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from accounts.models import Member
-from .KeywordFind import KeywordFind
+from .KeywordFind import *
 from django.views.decorators.csrf import csrf_exempt
+from .models import Sentence
 # 같은 폴더내에 KeywordFind.py 에서 KeywordFind 함수를 가져온다.
 import json
 from urllib import parse
@@ -27,12 +28,12 @@ def index(request):
         'nickname': nickname
     })
 # @csrf_exempt
-def sentence(request, keyword):
+def sentence(request):
     response_data = {
     # 설계한 대로 응답 데이터를 정리해주면 된다.
     'status': 200,
     'msg': 'success',
-    'data': None # dictionary 형태로 서빙을 해주면 여러개를 서빙하기 곤란하다.
+    'data': [] # dictionary 형태로 서빙을 해주면 여러개를 서빙하기 곤란하다.
     }
 
     if request.method == 'GET':
@@ -47,7 +48,17 @@ def sentence(request, keyword):
         return JsonResponse(response_data)
         # return HttpResponse('sentence function ready')
     elif request.method == 'POST':
-        response_data['data'] = KeywordFind(request.POST["keyword_2"])
+        # response_data['data'] = KeywordFind(request.POST["keyword_2"])
+        sentence_queryset = Sentence.objects.filter(content__contains=request.POST["keyword_2"])
+        for query in sentence_queryset:
+            response_data['data'].append(
+            [
+                query.id,
+                query.content,
+                query.like_count,
+                query.unlike_count
+            ]
+            )
             #
             #from .KeywordFind.py import KeywordFind(keyword)
             #는 keyword가 들어있는 문장들을 list로 반환한다.
@@ -58,4 +69,14 @@ def sentence(request, keyword):
         # return HttpResponse('sentence function ready')
 
 def update(request):
-    return HttpResponse('update goes here!')
+    for sentence in HRsentences_set:
+        DBsentences_queryset = Sentence.objects.all()
+        DBsentences = []
+        for query in DBsentences_queryset:
+            DBsentences.append(query.content)
+
+        if sentence in DBsentences:
+            pass
+        else:
+            Sentence.objects.create(content=sentence)
+    return HttpResponse('update complete!')

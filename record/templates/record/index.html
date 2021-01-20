@@ -81,9 +81,34 @@
           title.innerHTML = e.target.value + '<br>';
           content.innerHTML = "";
           for (let i = 0; i < data.length; i++) {
-            let sentence = '<div>' + '-' + data[i] + '.</div><br>'
-            // document.getElementsByTagName('body')[0].innerHTML += sentence
-            content.innerHTML += sentence;
+            let sentence_box = document.createElement('div');
+            // 문장과 좋아요, 싫어요 버튼이 들어갈 div 형성
+            let like_button = document.createElement('button');
+            // 좋아요 버튼 tag를 만든다.
+            let unlike_button = document.createElement('button');
+            // 싫어요 버튼 tag를 만든다.
+
+            sentence_box.innerHTML = '- &nbsp'+data[i][1]+'.';
+            // sentence_box에 문장을 넣어준다.
+            like_button.innerHTML = data[i][2];
+            // 좋아요버튼 안에, 좋아요 갯수를 넣어준다.
+            unlike_button.innerHTML = data[i][3];
+            // 싫어요버튼 안에, 좋아요 갯수를 넣어준다.
+
+            like_button.setAttribute('class', data[i][0]);
+            unlike_button.setAttribute('class', data[i][0]);
+            //좋아요, 싫어요 버튼에 문장_id를 class로 넣어준다.
+
+            // like_button.addEventListener('click', like)
+            // unlike_button.addEventListener('click', unlike)
+            // TODO: Event 추가해주고, URL 연결해주고 <int: 문장_id>로 ajax, view로 수정.
+            // TODO: 해당 url로 가면, url에서 문장-Id를 받아서 좋아요 갯수 올려주고, 갯수 response해주면 됨.
+
+
+            sentence_box.appendChild(like_button);
+            sentence_box.appendChild(unlike_button);
+
+            content.appendChild(sentence_box);
           }
         } else {
           console.log('실패')
@@ -109,7 +134,7 @@
 
       var csrftoken = getCookie('csrftoken');
       // POST 요청시 csrf_token 처리 함수
-      
+
       req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
       req.setRequestHeader("X-CSRFToken", csrftoken)
       // POST 방식으로 보낼 때에는 setRequestHeader 를 변경해주어야 하는구나.
