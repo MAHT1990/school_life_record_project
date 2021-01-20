@@ -56,3 +56,6 @@ def sentence(request, keyword):
         return JsonResponse(response_data)
         # return JsonResponse({'status': 2020})
         # return HttpResponse('sentence function ready')
+
+def update(request):
+    return HttpResponse('update goes here!')
