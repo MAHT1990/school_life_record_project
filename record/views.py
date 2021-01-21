@@ -54,7 +54,7 @@ def sentence(request):
             response_data['data'].append(
             [
                 query.id,
-                query.content,
+                query.content.strip(),
                 query.like_count,
                 query.unlike_count
             ]
@@ -80,3 +80,49 @@ def update(request):
         else:
             Sentence.objects.create(content=sentence)
     return HttpResponse('update complete!')
+
+def like(request, sentence_id):
+    login_id = request.session.get('login_id', False)
+    #id에 접근해서, login_id를 가진 Member의 like_posts에 접근
+    print(login_id)
+
+    response_data = {
+    # 설계한 대로 응답 데이터를 정리해주면 된다.
+    'status': 200,
+    'msg': 'success',
+    'data': None # dictionary 형태로 서빙을 해주면 여러개를 서빙하기 곤란하다.
+    }
+
+    liked_sentence = Sentence.objects.get(id=int(sentence_id))
+    liked_sentence.like_count += 1
+    liked_sentence.save()
+
+    liked_member = Member.objects.get(login_id=login_id)
+    liked_member.like_posts.add(liked_sentence)
+
+    response_data['data'] = liked_sentence.like_count
+    # member =
+    return JsonResponse(response_data)
+
+def unlike(request, sentence_id):
+    login_id = request.session.get('login_id', False)
+    #id에 접근해서, login_id를 가진 Member의 like_posts에 접근
+    print(login_id)
+
+    response_data = {
+    # 설계한 대로 응답 데이터를 정리해주면 된다.
+    'status': 200,
+    'msg': 'success',
+    'data': None # dictionary 형태로 서빙을 해주면 여러개를 서빙하기 곤란하다.
+    }
+
+    unliked_sentence = Sentence.objects.get(id=int(sentence_id))
+    unliked_sentence.unlike_count += 1
+    unliked_sentence.save()
+
+    unliked_member = Member.objects.get(login_id=login_id)
+    unliked_member.unlike_posts.add(unliked_sentence)
+
+    response_data['data'] = unliked_sentence.unlike_count
+    # member =
+    return JsonResponse(response_data)

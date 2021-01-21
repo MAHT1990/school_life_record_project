@@ -7,4 +7,5 @@ class Member(models.Model):
     login_pw = models.CharField(max_length=50)
     nickname = models.CharField(max_length=50)
 
-    like_posts = models.ManyToManyField('record.Sentence', blank=True)
+    like_posts = models.ManyToManyField('record.Sentence', blank=True, related_name='like_users', default=None)
+    unlike_posts = models.ManyToManyField('record.Sentence', blank=True, related_name='unlike_users', default=None)
