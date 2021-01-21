@@ -84,7 +84,7 @@ def update(request):
 def like(request, sentence_id):
     login_id = request.session.get('login_id', False)
     #id에 접근해서, login_id를 가진 Member의 like_posts에 접근
-    print(login_id)
+    # print(login_id)
 
     response_data = {
     # 설계한 대로 응답 데이터를 정리해주면 된다.
@@ -107,7 +107,7 @@ def like(request, sentence_id):
 def unlike(request, sentence_id):
     login_id = request.session.get('login_id', False)
     #id에 접근해서, login_id를 가진 Member의 like_posts에 접근
-    print(login_id)
+    # print(login_id)
 
     response_data = {
     # 설계한 대로 응답 데이터를 정리해주면 된다.
