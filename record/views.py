@@ -38,7 +38,6 @@ def sentence(request):
 
     if request.method == 'GET':
         keyword_decode = parse.unquote(parse.unquote(keyword))
-        # TODO: Encoding 문제 해결. 한글을 받아라!
         response_data['data'] = KeywordFind(keyword_decode)
             #
             #from .KeywordFind.py import KeywordFind(keyword)
@@ -49,7 +48,8 @@ def sentence(request):
         # return HttpResponse('sentence function ready')
     elif request.method == 'POST':
         # response_data['data'] = KeywordFind(request.POST["keyword_2"])
-        sentence_queryset = Sentence.objects.filter(content__contains=request.POST["keyword_2"])
+        sentence_queryset = Sentence.objects.filter(content__contains=request.POST["keyword_2"]).order_by('-like_count')
+        # ORDERING을 좋아요를 많이 받은 순서로 정렬한다.
         for query in sentence_queryset:
             response_data['data'].append(
             [
