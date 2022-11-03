@@ -11,6 +11,8 @@ from urllib import parse
 # Create your views here.
 
 # @csrf_exempt
+
+
 def index(request):
     login_id = request.session.get('login_id', False)
     member = Member.objects.filter(login_id=login_id).first()
@@ -22,51 +24,53 @@ def index(request):
         # 로그인을 하지않으면, session자체가 없어서 False 값(default값)을 login_id에 할당한다.
     else:
         nickname = None
-    return render(request,'record/index.html',{
+    return render(request, 'record/index.html', {
         'is_logined': bool(login_id),
         'login_id': login_id,
         'nickname': nickname
     })
 # @csrf_exempt
+
+
 def sentence(request):
     response_data = {
-    # 설계한 대로 응답 데이터를 정리해주면 된다.
-    'status': 200,
-    'msg': 'success',
-    'data': [] # dictionary 형태로 서빙을 해주면 여러개를 서빙하기 곤란하다.
+        # 설계한 대로 응답 데이터를 정리해주면 된다.
+        'status': 200,
+        'msg': 'success',
+        'data': []  # dictionary 형태로 서빙을 해주면 여러개를 서빙하기 곤란하다.
     }
 
     if request.method == 'GET':
         keyword_decode = parse.unquote(parse.unquote(keyword))
         response_data['data'] = KeywordFind(keyword_decode)
-            #
-            #from .KeywordFind.py import KeywordFind(keyword)
-            #는 keyword가 들어있는 문장들을 list로 반환한다.
-            #
+        #
+        # from .KeywordFind.py import KeywordFind(keyword)
+        # 는 keyword가 들어있는 문장들을 list로 반환한다.
+        #
 
         return JsonResponse(response_data)
         # return HttpResponse('sentence function ready')
     elif request.method == 'POST':
         # response_data['data'] = KeywordFind(request.POST["keyword_2"])
-        sentence_queryset = Sentence.objects.filter(content__contains=request.POST["keyword_2"]).order_by('-like_count')
+        sentence_queryset = Sentence.objects.filter(
+            content__contains=request.POST["keyword_2"]).order_by('-like_count')
         # ORDERING을 좋아요를 많이 받은 순서로 정렬한다.
         for query in sentence_queryset:
             response_data['data'].append(
-            [
-                query.id,
-                query.content.strip(),
-                query.like_count,
-                query.unlike_count
-            ]
+                [
+                    query.id,
+                    query.content.strip(),
+                    query.like_count,
+                    query.unlike_count
+                ]
             )
             #
-            #from .KeywordFind.py import KeywordFind(keyword)
-            #는 keyword가 들어있는 문장들을 list로 반환한다.
+            # from .KeywordFind.py import KeywordFind(keyword)
+            # 는 keyword가 들어있는 문장들을 list로 반환한다.
             #
 
         return JsonResponse(response_data)
-        # return JsonResponse({'status': 2020})
-        # return HttpResponse('sentence function ready')
+
 
 def update(request):
     for sentence in HRsentences_set:
@@ -81,16 +85,17 @@ def update(request):
             Sentence.objects.create(content=sentence)
     return HttpResponse('update complete!')
 
+
 def like(request, sentence_id):
     login_id = request.session.get('login_id', False)
-    #id에 접근해서, login_id를 가진 Member의 like_posts에 접근
+    # id에 접근해서, login_id를 가진 Member의 like_posts에 접근
     # print(login_id)
 
     response_data = {
-    # 설계한 대로 응답 데이터를 정리해주면 된다.
-    'status': 200,
-    'msg': 'success',
-    'data': None # dictionary 형태로 서빙을 해주면 여러개를 서빙하기 곤란하다.
+        # 설계한 대로 응답 데이터를 정리해주면 된다.
+        'status': 200,
+        'msg': 'success',
+        'data': None  # dictionary 형태로 서빙을 해주면 여러개를 서빙하기 곤란하다.
     }
 
     liked_sentence = Sentence.objects.get(id=int(sentence_id))
@@ -104,16 +109,17 @@ def like(request, sentence_id):
     # member =
     return JsonResponse(response_data)
 
+
 def unlike(request, sentence_id):
     login_id = request.session.get('login_id', False)
-    #id에 접근해서, login_id를 가진 Member의 like_posts에 접근
+    # id에 접근해서, login_id를 가진 Member의 like_posts에 접근
     # print(login_id)
 
     response_data = {
-    # 설계한 대로 응답 데이터를 정리해주면 된다.
-    'status': 200,
-    'msg': 'success',
-    'data': None # dictionary 형태로 서빙을 해주면 여러개를 서빙하기 곤란하다.
+        # 설계한 대로 응답 데이터를 정리해주면 된다.
+        'status': 200,
+        'msg': 'success',
+        'data': None  # dictionary 형태로 서빙을 해주면 여러개를 서빙하기 곤란하다.
     }
 
     unliked_sentence = Sentence.objects.get(id=int(sentence_id))
