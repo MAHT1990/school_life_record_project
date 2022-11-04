@@ -1,5 +1,5 @@
 # Happy HaengBal(ver. 1.10)
-[HappyHaengBal](http://52.79.54.27/)
+[HappyHaengBal](http://52.79.54.27/) TEST ID/PW : test/test
 
 #### 생활기록부 작성에 많은 시간과 노력을 쏟는 교사분들을 위한 프로젝트.
 
